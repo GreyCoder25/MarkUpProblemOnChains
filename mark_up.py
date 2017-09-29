@@ -1,4 +1,3 @@
-import numpy as np
 
 
 def gen_matrix_vector_prod(A, x, gen_add, gen_mult):
@@ -29,7 +28,8 @@ def mark_up(gen_add, gen_mult, Q, G):
     """
 
     n = Q.shape[1]                                              # length of the chain
-    for i in range(n - 1, -1, -1):                              # iterating over objects from n - 1 to 0
-        Q[:, i] = gen_mult(gen_matrix_vector_prod(G[i], Q[:, i+1]))
+    for i in range(n - 2, -1, -1):                              # iterating over objects from n - 1 to 0
+        Q[:, i] = gen_mult(Q[:, i], gen_matrix_vector_prod(G[i], Q[:, i+1], gen_add, gen_mult))
+        print(Q[:, i])
 
     return gen_add(Q[:, 0])
