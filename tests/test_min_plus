@@ -1,0 +1,17 @@
+N = 4; K = 3; min,+;
+Q:
+0 0 0 0
+0 0 0 0
+0 0 0 0
+G0:
+5 2 inf
+3 inf 7
+inf 6 inf
+G1:
+1 5 inf
+5 inf 7
+inf 6 4
+G2:
+5 4 inf
+8 6 2
+5 4 inf

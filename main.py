@@ -1,5 +1,6 @@
 import numpy as np
 from io import StringIO
+# import os
 
 import mark_up
 
@@ -49,9 +50,14 @@ def get_data(data_path):
     return gen_add, gen_mult, Q, G
 
 
-gen_add, gen_mult, Q, G = get_data("tests/test_(max,+)")
+# print(os.listdir("tests"))
+
+gen_add, gen_mult, Q, G = get_data("tests/test_max_plus")
 # print(gen_add, gen_mult, Q, G, sep='\n')
 print(mark_up.mark_up(gen_add, gen_mult, Q, G))
 
-gen_add, gen_mult, Q, G = get_data("tests/test_(or,and)")
+gen_add, gen_mult, Q, G = get_data("tests/test_or_and")
+print(mark_up.mark_up(gen_add, gen_mult, Q, G))
+
+gen_add, gen_mult, Q, G = get_data("tests/test_min_plus")
 print(mark_up.mark_up(gen_add, gen_mult, Q, G))
