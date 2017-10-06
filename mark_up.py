@@ -23,6 +23,9 @@ def mark_up(gen_add, gen_mult, Q, G, Adj_list):
     G : 3-D array
     Array of G-matrices(matrix of the weights of edges between two neighboring objects).
 
+    Adj_list : array of arrays
+    Neighborhood structure.
+
     Returns
     -------
     Generalized sum of all markings.
