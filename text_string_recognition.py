@@ -8,25 +8,27 @@ height = max(heights)
 width = 500
 
 
-def generate_string(images, size, length):
+def generate_string(letters, size):
 
     string_image = Image.new('RGB', size)
     x_offset = 0
 
     while x_offset != size[0]:
-        next_letter = images[rnd.randint(0, len(images) - 1)]
+        next_letter = letters[rnd.randint(0, len(letters) - 1)]
         if next_letter.size[0] < size[0] - x_offset:
             string_image.paste(next_letter, (x_offset, 0))
             x_offset += next_letter.size[0]
         else:
-            string_image.paste(images[-1], (x_offset, 0))
+            string_image.paste(letters[-1], (x_offset, 0))
             x_offset += 1
 
     string_image.save('text_string.jpg')
 
 
-def weights_init():
+def weights_init(letters, text_string):
+
+    pass
 
 
-generate_string(images, (width, height), 8)
+generate_string(images, (width, height))
 
