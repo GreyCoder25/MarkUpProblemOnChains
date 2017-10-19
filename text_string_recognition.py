@@ -47,6 +47,26 @@ def weights_init(letters, text_string):
     return weights
 
 
+def generate_input_file(N, K, images):
+
+    with open("test_string_image_recognition", 'w') as f:
+
+        f.write("N = %d; K = %d; min,+;\n" % (N, K))
+        f.write("Neighborhood:\n")
+        for i in range(N - 1):
+            for im in images:
+                neib_index = i + im.size[0]
+                if neib_index < N:
+                    f.write(str(neib_index) + ' ')
+            f.write("\n")
+
+        f.write("Q:\n")
+        for i in range(K):
+            f.write(("0 " * N) + "\n")
+
+
+
 text_string_image = generate_string(images, (width, height))
 weights = weights_init(images, text_string_image)
-print(weights)
+# print(weights)
+generate_input_file(text_string_image.size[0] + 1, len(images), images)
