@@ -64,7 +64,7 @@ def general_mark_up(objects):
 
 if __name__ == '__main__':
     NUM_OBJECTS = 20
-    LABELS = ['A', 'B', 'C', ' ']
+    LABELS = ['A', 'B', 'C', '_']
     NEIGHBORS_RELATIVE_INDEXES = [1, 5, 8, 10]
     objects = [TObject(i, LABELS, NEIGHBORS_RELATIVE_INDEXES) for i in range(NUM_OBJECTS)]
 

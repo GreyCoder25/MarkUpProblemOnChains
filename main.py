@@ -27,9 +27,9 @@ def create_task(letters_dict, text_image):
 
 if __name__ == '__main__':
     # text string recognition
-    ground_truth_text = 'ABC_BACAB'
+    ground_truth_text = 'AB_CBCBA'
     text_image_generator = TextImageGenerator()
-    text_image = text_image_generator.generate_string_image(ground_truth_text, noise=True, noise_epsilon=0.96)
+    text_image = text_image_generator.generate_string_image(ground_truth_text, noise=True, noise_epsilon=0.6)
 
     objects = create_task(text_image_generator.letters_dict, text_image)
     labeling = general_mark_up(objects)

@@ -32,13 +32,13 @@ class TextImageGenerator(object):
                 for j in range(string_image.shape[1]):
                     if rnd.random() < noise_epsilon:
                         string_image[i, j] = rnd.randint(0, 256)
+            string_image = Image.fromarray(string_image)
 
-        string_image = Image.fromarray(string_image)
         string_image.save('text_string.jpg')
         return string_image
 
 
 if __name__ == '__main__':
     text_gen = TextImageGenerator()
-    text_string_image = text_gen.generate_string_image('ABA CBCABC  CB')
+    text_string_image = text_gen.generate_string_image('ABA_CBCABC__CB')
     text_string_image.show()
