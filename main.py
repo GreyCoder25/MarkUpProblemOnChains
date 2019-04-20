@@ -2,72 +2,34 @@ import numpy as np
 from io import StringIO
 # import os
 
-import mark_up
+from mark_up import TObject, general_mark_up
+from text_image_generation import TextImageGenerator
 
 
-def get_data(data_path):
+def create_task(letters_dict, text_image):
+    text_image = np.array(text_image)
+    n_objects = text_image.shape[1] + 1         # +1 because of first fake object to make computations simpler
+    neighbors = []
+    for letter in letters_dict:
+        neighbors.append(letters_dict[letter].width)
 
-    with open(data_path) as f:
-
-        input_data = f.readline().split(';')[:-1]
-        N, K = int(input_data[0][-1]), int(input_data[1][-1])
-        gen_add, gen_mult = input_data[2].strip().split(',')
-
-        f.readline()
-        Adj_list = []
-        for i in range(N-1):
-            i_neighbors = np.loadtxt(StringIO(f.readline()), dtype=np.dtype('int32'))
-            if i_neighbors.size == 1:
-                Adj_list.append(np.array([i_neighbors]))
-            else:
-                Adj_list.append(i_neighbors)
-        print(Adj_list)
-
-        f.readline()
-        Q = ''
-        for _ in range(K):
-            Q += f.readline()
-        Q = np.loadtxt(StringIO(Q))
-
-        G = np.empty((N-1, K, K, K))
-        for i in range(N-1):
-            for j in range(Adj_list[i].size):
-                f.readline()
-                G_str = ''
-                for _ in range(K):
-                    G_str += f.readline()
-                G[i, j] = np.loadtxt(StringIO(G_str))
-
-        if gen_add == '+':
-            gen_add = np.sum
-        elif gen_add == 'or':
-            gen_add = np.any
-        elif gen_add == 'max':
-            gen_add = np.max
-        elif gen_add == 'min':
-            gen_add = np.min
-
-        if gen_mult == '*':
-            gen_mult = np.multiply
-        elif gen_mult == '+':
-            gen_mult = np.add
-        elif gen_mult == 'and':
-            gen_mult = np.logical_and
-        elif gen_mult == 'min':
-            gen_mult = np.minimum
-        elif gen_mult == 'max':
-            gen_mult = np.maximum
-
-    return gen_add, gen_mult, Q, G, Adj_list
+    objects = [TObject(i, list(letters_dict.keys()), neighbors) for i in range(n_objects)]
+    for letter in letters_dict:
+        objects[0].q[letter] = 0
+    for image in letters_dict:
+        for obj in objects[1:]:
+            if obj.index >= letters_dict[image].width:
+                for k_ in letters_dict:
+                    obj.g[obj.index - letters_dict[image].width][k_][image] =\
+                        ((text_image[:, obj.index - letters_dict[image].width:obj.index] - np.array(letters_dict[image]))**2).sum()
+    return objects
 
 
-# print(os.listdir("tests"))
-
-gen_add, gen_mult, Q, G, Adj_list = get_data("tests/test_max_plus")
-print(mark_up.mark_up(gen_add, gen_mult, Q, G, Adj_list))
-
-gen_add, gen_mult, Q, G, Adj_list = get_data("tests/test_or_and")
-print(mark_up.mark_up(gen_add, gen_mult, Q, G, Adj_list))
-
-gen_add, gen_mult, Q, G, Adj_list = get_data("tests/test_min_plus")
-print(mark_up.mark_up(gen_add, gen_mult, Q, G, Adj_list))
+if __name__ == '__main__':
+    # text string recognition
+    text_image_generator = TextImageGenerator()
+    text_image = text_image_generator.generate_string_image('ABC_BACC_CABABB', noise=True, noise_epsilon=0.96)
+    text_image.show()
+    objects = create_task(text_image_generator.letters_dict, text_image)
+    labeling = general_mark_up(objects)
+    print(labeling)
