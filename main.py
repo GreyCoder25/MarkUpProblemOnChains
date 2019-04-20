@@ -1,6 +1,6 @@
 import numpy as np
-from io import StringIO
-# import os
+import matplotlib.pyplot as plt
+import matplotlib.image as mpimg
 
 from mark_up import TObject, general_mark_up
 from text_image_generation import TextImageGenerator
@@ -27,9 +27,15 @@ def create_task(letters_dict, text_image):
 
 if __name__ == '__main__':
     # text string recognition
+    ground_truth_text = 'ABC_BACAB'
     text_image_generator = TextImageGenerator()
-    text_image = text_image_generator.generate_string_image('ABC_BACC_CABABB', noise=True, noise_epsilon=0.96)
-    text_image.show()
+    text_image = text_image_generator.generate_string_image(ground_truth_text, noise=True, noise_epsilon=0.96)
+
     objects = create_task(text_image_generator.letters_dict, text_image)
     labeling = general_mark_up(objects)
-    print(labeling)
+
+    image = mpimg.imread('text_string.jpg')
+    imgplot = plt.imshow(image, cmap='gray', vmin=0, vmax=255)
+    plt.title("Ground truth: {}\nResult of recognition: {}".format(ground_truth_text, labeling))
+    plt.show()
+
